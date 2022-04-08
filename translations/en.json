@@ -1,0 +1,31 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Swatch",
+                "description": "URL you use to access Swatch (ie. `http://ip.ad.dr.ess:4500/`)",
+                "data": {
+                    "host": "HOST"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_url": "Invalid URL"
+        },
+        "abort": {
+            "already_configured": "Device is already configured"
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                }
+            }
+        },
+        "abort": {
+            "only_advanced_options": "Advanced mode is disabled and there are only advanced options"
+        }
+    }
+}
