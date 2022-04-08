@@ -1,26 +1,13 @@
-# Example services.yaml entry
-
-# Service ID
+---
 detect_object:
-  # Service name as shown in UI
   name: Detect Object
-  # Description of the service
   description: Detect Object Within Zone.
-  # If the service accepts entity IDs, target allows the user to specify entities by entity, device, or area. If `target` is specified, `entity_id` should not be defined in the `fields` map. By default it shows only targets matching entities from the same domain as the service, but if further customization is required, target supports the entity, device, and area selectors (https://www.home-assistant.io/docs/blueprint/selectors/). Entity selector parameters will automatically be applied to device and area, and device selector parameters will automatically be applied to area. 
   target:
-  # Different fields that your service accepts
   fields:
-    # Key of the field
     image_url:
-      # Field name as shown in UI
       name: Image URL
-      # Description of the field
       description: Image URL for this object, only required if not provided in the config file.
-      # Whether or not field is required (default = false)
       required: false
-      # Advanced fields are only shown when the advanced mode is enabled for the user (default = false)
       advanced: false
-      # Example value that can be passed for this field
       example: "http://ip.ad.dr.ess/camera/snapshot.jpg"
-      # The default field value
       default: ""
