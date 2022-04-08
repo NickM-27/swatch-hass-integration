@@ -24,6 +24,7 @@ from .const import (
     NAME,
     STARTUP_MESSAGE,
 )
+from .service import detect_object_for_camera
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
@@ -113,6 +114,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     }
 
     hass.config_entries.async_setup_platforms(entry, PLATFORMS)
+    hass.services.register(DOMAIN, "swatch_detect_object", detect_object_for_camera)
 
     return True
 
