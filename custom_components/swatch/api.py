@@ -67,7 +67,7 @@ class SwatchApiClient:
                     "get", 
                     str(URL(self._host) / f"api/{camera_name}"
                 )),
-        )
+            )
 
     async def api_wrapper(
         self,
