@@ -36,6 +36,7 @@ def get_config_entry_title(url_str: str) -> str:
 
 
 def validate_host(host) -> bool:
+    _LOGGER.error(f"Getting the swatch host {host}")
     resp = requests.get(host)
 
     if not resp or resp.status_code != 200:
