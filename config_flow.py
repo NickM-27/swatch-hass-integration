@@ -34,6 +34,15 @@ def get_config_entry_title(url_str: str) -> str:
     return str(url)[len(url.scheme + "://") :]
 
 
+def validate_host(host) -> bool:
+    resp = requests.get(host)
+
+    if not resp or resp.status_code != 200:
+        return False
+    else:
+        return True
+
+
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
     """Validate the user input allows us to connect.
 
@@ -49,15 +58,12 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
 
     host = data["host"]
 
-    resp = requests.get(host).json()
-
-    if not resp or resp.status_code != 200:
+    host_is_valid = await hass.async_add_executor_job(
+        validate_host, host
+    )
+    
+    if not host_is_valid:
         raise CannotConnect
-
-    # If you cannot connect:
-    # throw CannotConnect
-    # If the authentication is wrong:
-    # InvalidAuth
 
     # Return info that you want to store in the config entry.
     return {
