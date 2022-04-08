@@ -29,8 +29,7 @@ def get_config_entry_title(url_str: str) -> str:
     # Strip the scheme from the URL as it's not that interesting in the title
     # and space is limited on the integrations page.
     url = URL(url_str)
-    return str(url).replace('http://', '')
-
+    return str(url).replace("http://", "")
 
 def validate_host(host) -> bool:
     """Validate if Swatch host is valid."""
@@ -41,9 +40,8 @@ def validate_host(host) -> bool:
     else:
         return True
 
-
 async def validate_input(
-    hass: HomeAssistant, 
+    hass: HomeAssistant,
     data: dict[str, Any],
 ) -> dict[str, Any]:
     """Validate the user input allows us to connect.
@@ -51,13 +49,6 @@ async def validate_input(
     Data has the keys from STEP_USER_DATA_SCHEMA with
     values provided by the user.
     """
-
-    # If your PyPI package is not built with async, pass your methods
-    # to the executor:
-    # await hass.async_add_executor_job(
-    #     your_validate_func, data["username"], data["password"]
-    # )
-
     host = data[CONF_URL]
 
     host_is_valid = await hass.async_add_executor_job(validate_host, host)
