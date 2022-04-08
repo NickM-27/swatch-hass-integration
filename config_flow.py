@@ -3,6 +3,10 @@ from __future__ import annotations
 
 import logging
 from typing import Any
+from execnet import HostNotFound
+
+from yarl import URL
+import requests
 
 import voluptuous as vol
 
@@ -15,29 +19,20 @@ from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-# TODO adjust the data schema to the data that you need
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
         vol.Required("host"): str,
-        vol.Required("username"): str,
-        vol.Required("password"): str,
     }
 )
 
 
-class PlaceholderHub:
-    """Placeholder class to make tests pass.
+def get_config_entry_title(url_str: str) -> str:
+    """Get the title of a config entry from the URL."""
 
-    TODO Remove this placeholder class and replace with things from your PyPI package.
-    """
-
-    def __init__(self, host: str) -> None:
-        """Initialize."""
-        self.host = host
-
-    async def authenticate(self, username: str, password: str) -> bool:
-        """Test if we can authenticate with the host."""
-        return True
+    # Strip the scheme from the URL as it's not that interesting in the title
+    # and space is limited on the integrations page.
+    url = URL(url_str)
+    return str(url)[len(url.scheme + "://") :]
 
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
@@ -53,10 +48,12 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     #     your_validate_func, data["username"], data["password"]
     # )
 
-    hub = PlaceholderHub(data["host"])
+    host = data["host"]
 
-    if not await hub.authenticate(data["username"], data["password"]):
-        raise InvalidAuth
+    resp = requests.get(host).json()
+
+    if not resp or resp.status_code != 200:
+        raise CannotConnect
 
     # If you cannot connect:
     # throw CannotConnect
@@ -64,7 +61,10 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     # InvalidAuth
 
     # Return info that you want to store in the config entry.
-    return {"title": "Name of the device"}
+    return {
+        "title": get_config_entry_title(host),
+        "host": "host"
+    }
 
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -87,8 +87,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             info = await validate_input(self.hass, user_input)
         except CannotConnect:
             errors["base"] = "cannot_connect"
-        except InvalidAuth:
-            errors["base"] = "invalid_auth"
         except Exception:  # pylint: disable=broad-except
             _LOGGER.exception("Unexpected exception")
             errors["base"] = "unknown"
@@ -102,7 +100,3 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 class CannotConnect(HomeAssistantError):
     """Error to indicate we cannot connect."""
-
-
-class InvalidAuth(HomeAssistantError):
-    """Error to indicate there is invalid auth."""
