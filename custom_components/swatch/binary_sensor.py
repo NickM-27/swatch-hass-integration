@@ -34,11 +34,11 @@ async def async_setup_entry(
     async_add_entities(
         [
             SwatchObjectSensor(
-                entry, 
-                swatch_api, 
-                swatch_config, 
-                cam_name, 
-                zone_name, 
+                entry,
+                swatch_api,
+                swatch_config,
+                cam_name,
+                zone_name,
                 obj_name,
             )
             for cam_name, zone_name, obj_name in get_zones_and_objects(swatch_config)
