@@ -8,6 +8,9 @@ ATTR_CONFIG = "config"
 ATTR_CLIENT = "client"
 ATTR_CLIENT_ID = "client_id"
 
+# Services
+SERVICE_DETECT_OBJECT = "swatch_detect_object"
+
 STARTUP_MESSAGE = """
 -------------------------------------------------------------------
 {title}
