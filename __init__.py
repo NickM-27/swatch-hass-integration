@@ -29,8 +29,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     client = SwatchApiClient(entry.data.get(CONF_URL), async_get_clientsession(hass))
     model = f"{(await async_get_integration(hass, DOMAIN)).version}/1.0.0"
 
+    try:
+        config = await client.async_get_config()
+    except Exception:
+        config = ""
+
     hass.data[DOMAIN][entry.entry_id] = {
         ATTR_CLIENT: client,
+        ATTR_CONFIG: config,
         ATTR_MODEL: model,
     }
 
