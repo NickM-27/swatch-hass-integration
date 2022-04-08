@@ -42,18 +42,18 @@ repos:
     hooks:
       - id: prettier
         stages: [manual]
-  - repo: local
-    hooks:
-      - id: pylint
-        name: pylint
-        entry: pylint
-        language: system
-        types: [python]
-        args: ["--errors-only"]
-      - id: mypy
-        name: mypy
-        entry: mypy
-        language: system
-        types: [python]
-        require_serial: true
-        files: ^(custom_components/swatch|tests)/.+\.py$
+  #- repo: local
+  #  hooks:
+  #    - id: pylint
+  #      name: pylint
+  #      entry: pylint
+  #      language: system
+  #      types: [python]
+  #      args: ["--errors-only"]
+  #    - id: mypy
+  #      name: mypy
+  #      entry: mypy
+  #      language: system
+  #      types: [python]
+  #      require_serial: true
+  #      files: ^(custom_components/swatch|tests)/.+\.py$
