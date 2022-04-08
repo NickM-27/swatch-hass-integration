@@ -1,6 +1,7 @@
 """The swatch integration."""
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
@@ -9,14 +10,22 @@ from homeassistant.const import (
     CONF_URL,
     Platform,
 )
-from homeassistant.core import HomeAssistant
+from homeassistant.core import Config, HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.entity import Entity
 from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify
 
 from .api import SwatchApiClient
-from .const import ATTR_CONFIG, ATTR_CLIENT, DOMAIN
+from .const import (
+    ATTR_CONFIG, 
+    ATTR_CLIENT, 
+    DOMAIN,
+    NAME,
+    STARTUP_MESSAGE,
+)
+
+_LOGGER: logging.Logger = logging.getLogger(__name__)
 
 PLATFORMS: list[Platform] = [Platform.BINARY_SENSOR]
 
@@ -67,6 +76,21 @@ def get_cameras_and_zones(config: dict[str, Any]) -> set[str]:
         for zone in config["cameras"][camera].get("zones", {}).keys():
             cameras_zones.add(zone)
     return cameras_zones
+
+
+async def async_setup(hass: HomeAssistant, config: Config) -> bool:
+    """Set up this integration using YAML is not supported."""
+    integration = await async_get_integration(hass, DOMAIN)
+    _LOGGER.info(
+        STARTUP_MESSAGE.format(
+            title=NAME,
+            integration_version=integration.version,
+        )
+    )
+
+    hass.data.setdefault(DOMAIN, {})
+
+    return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
