@@ -14,7 +14,6 @@ from homeassistant.util import slugify
 
 from .api import SwatchApiClient, SwatchApiClientError
 from .const import ATTR_CLIENT, ATTR_CONFIG, DOMAIN, NAME, STARTUP_MESSAGE
-from .service import detect_object_for_camera
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
@@ -32,8 +31,8 @@ def get_swatch_device_identifier(
 
 
 def get_swatch_entity_unique_id(
-    config_entry_id: str, 
-    type_name: str, 
+    config_entry_id: str,
+    type_name: str,
     name: str,
 ) -> str:
     """Get the unique_id for a Swatch entity."""
