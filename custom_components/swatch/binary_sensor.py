@@ -22,7 +22,9 @@ _LOGGER: logging.Logger = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
-    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Binary sensor entry setup."""
     swatch_api = hass.data[DOMAIN][entry.entry_id][ATTR_CLIENT]
@@ -32,7 +34,12 @@ async def async_setup_entry(
     async_add_entities(
         [
             SwatchObjectSensor(
-                entry, swatch_api, swatch_config, cam_name, zone_name, obj_name
+                entry, 
+                swatch_api, 
+                swatch_config, 
+                cam_name, 
+                zone_name, 
+                obj_name,
             )
             for cam_name, zone_name, obj_name in get_zones_and_objects(swatch_config)
         ]
