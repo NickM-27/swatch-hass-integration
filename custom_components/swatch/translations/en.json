@@ -2,7 +2,6 @@
     "config": {
         "step": {
             "user": {
-                "title": "Swatch",
                 "description": "URL you use to access Swatch (ie. `http://ip.ad.dr.ess:4500/`)",
                 "data": {
                     "url": "URL"

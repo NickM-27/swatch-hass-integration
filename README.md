@@ -3,7 +3,7 @@
 
 <img src="https://raw.githubusercontent.com/NickM-27/swatch-hass-integration/master/images/swatch.png"
      alt="Swatch icon"
-     width="35%"
+     width="16%"
      align="right"
      style="float: right; margin: 10px 0px 20px 20px;" />
 
