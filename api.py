@@ -3,7 +3,7 @@
 import asyncio
 import logging
 import socket
-from typing import Any, Dict, List, cast
+from typing import Any, Dict, cast
 
 import aiohttp
 import async_timeout
@@ -53,8 +53,8 @@ class SwatchApiClient:
         self,
         method: str,
         url: str,
-        data: dict | None = None,
-        headers: dict | None = None,
+        data: dict = None,
+        headers: dict = None,
         decode_json: bool = True,
     ) -> Any:
         """Get information from the API."""
