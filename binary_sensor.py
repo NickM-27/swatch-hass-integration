@@ -32,8 +32,8 @@ async def async_setup_entry(
     swatch_config = hass.data[DOMAIN][entry.entry_id][ATTR_CONFIG]
     async_add_entities(
         [
-            SwatchObjectSensor(entry, swatch_config, cam_name, obj)
-            for cam_name, obj in get_zones_and_objects(swatch_config)
+            SwatchObjectSensor(entry, swatch_config, zone_name, obj)
+            for zone_name, obj in get_zones_and_objects(swatch_config)
         ]
     )
 
@@ -62,7 +62,7 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity):  # type: ignore[misc
         return get_swatch_entity_unique_id(
             self._config_entry.entry_id,
             "object_sensor",
-            f"{self._cam_name}_{self._obj_name}",
+            f"{self._zone_name}_{self._obj_name}",
         )
 
     @property
