@@ -50,12 +50,23 @@ class SwatchApiClient:
         image_url
     ) -> dict[str, Any]:
         """Get data from the API."""
-        return cast(
-            Dict[str, Any],
-            await self.api_wrapper(
-                "get", 
-                str(URL(self._host) / f"api/{camera_name}"
-            )),
+
+        if image_url:
+            return cast(
+                Dict[str, Any],
+                await self.api_wrapper(
+                    "get", 
+                    str(URL(self._host) / f"api/{camera_name}",
+                    { "image_url": image_url },
+                )),
+            )
+        else:
+            return cast(
+                Dict[str, Any],
+                await self.api_wrapper(
+                    "get", 
+                    str(URL(self._host) / f"api/{camera_name}"
+                )),
         )
 
     async def api_wrapper(
