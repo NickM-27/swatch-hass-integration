@@ -48,7 +48,9 @@ async def async_setup_entry(
     # Setup services
     platform = entity_platform.async_get_current_platform()
     platform.async_register_entity_service(
-        SERVICE_DETECT_OBJECT, {vol.Optional("image_url"): str}, "detect_object"
+        SERVICE_DETECT_OBJECT, 
+        {vol.Optional("image_url"): str}, 
+        "detect_object",
     )
 
 
