@@ -22,10 +22,10 @@ repos:
           - --quiet-level=2
         exclude_types: [csv, json]
         exclude: ^tests/fixtures/
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.8.0
-    hooks:
-      - id: isort
+  #- repo: https://github.com/PyCQA/isort
+  #  rev: 5.8.0
+  #  hooks:
+  #    - id: isort
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.2.0
     hooks:
