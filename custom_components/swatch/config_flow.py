@@ -31,6 +31,7 @@ def get_config_entry_title(url_str: str) -> str:
     url = URL(url_str)
     return str(url).replace("http://", "")
 
+
 def validate_host(host) -> bool:
     """Validate if Swatch host is valid."""
     resp = requests.get(host)
@@ -39,6 +40,7 @@ def validate_host(host) -> bool:
         return False
     else:
         return True
+
 
 async def validate_input(
     hass: HomeAssistant,
@@ -84,7 +86,10 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             _LOGGER.exception("Unexpected exception")
             errors["base"] = "unknown"
         else:
-            return self.async_create_entry(title=info["title"], data=user_input)
+            return self.async_create_entry(
+                title=info["title"], 
+                data=user_input,
+            )
 
         return self.async_show_form(
             step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
