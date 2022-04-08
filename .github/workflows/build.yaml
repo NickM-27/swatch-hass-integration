@@ -1,5 +1,5 @@
 ---
-name: Validate with hassfest
+name: Build
 
 on:
   push:
