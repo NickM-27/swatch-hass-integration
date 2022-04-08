@@ -5,5 +5,5 @@
         "binary_sensor"
     ],
     "iot_class": "Local Push",
-    "homeassistant": "2022.4.0"
+    "homeassistant": "2021.12.0b2"
 }
