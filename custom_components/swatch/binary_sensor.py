@@ -22,7 +22,13 @@ from . import (
     SwatchEntity,
 )
 from .api import SwatchApiClient, SwatchApiClientError
-from .const import ATTR_CLIENT, ATTR_CONFIG, DOMAIN, NAME, SERVICE_DETECT_OBJECT
+from .const import (
+    ATTR_CLIENT,
+    ATTR_CONFIG, 
+    DOMAIN, 
+    NAME, 
+    SERVICE_DETECT_OBJECT,
+)
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
