@@ -5,18 +5,24 @@ import logging
 from typing import Any, cast
 
 import voluptuous as vol
-from homeassistant.components.binary_sensor import (DEVICE_CLASS_OCCUPANCY,
-                                                    BinarySensorEntity)
+from homeassistant.components.binary_sensor import (
+    DEVICE_CLASS_OCCUPANCY,
+    BinarySensorEntity,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_platform
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from . import (SwatchEntity, get_friendly_name, get_swatch_device_identifier,
-               get_swatch_entity_unique_id, get_zones_and_objects)
+from . import (
+    SwatchEntity,
+    get_friendly_name,
+    get_swatch_device_identifier,
+    get_swatch_entity_unique_id,
+    get_zones_and_objects,
+)
 from .api import SwatchApiClient, SwatchApiClientError
-from .const import (ATTR_CLIENT, ATTR_CONFIG, DOMAIN, NAME,
-                    SERVICE_DETECT_OBJECT)
+from .const import ATTR_CLIENT, ATTR_CONFIG, DOMAIN, NAME, SERVICE_DETECT_OBJECT
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
