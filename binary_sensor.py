@@ -81,7 +81,7 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity):  # type: ignore[misc
     @property
     def name(self) -> str:
         """Return the name of the sensor."""
-        return f"{get_friendly_name(self._zone_name)} {self._obj_name}".title()
+        return f"{get_friendly_name(self._zone_name)} {get_friendly_name(self._obj_name)}".title()
 
     @property
     def is_on(self) -> bool:
