@@ -31,7 +31,11 @@ def get_swatch_device_identifier(
         return (DOMAIN, entry.entry_id)
 
 
-def get_swatch_entity_unique_id(config_entry_id: str, type_name: str, name: str) -> str:
+def get_swatch_entity_unique_id(
+    config_entry_id: str, 
+    type_name: str, 
+    name: str,
+) -> str:
     """Get the unique_id for a Swatch entity."""
     return f"{config_entry_id}:{type_name}:{name}"
 

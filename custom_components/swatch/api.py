@@ -45,12 +45,11 @@ class SwatchApiClient:
         )
 
     async def async_detect_camera(
-        self, 
-        camera_name, 
+        self,
+        camera_name,
         image_url,
     ) -> dict[str, Any]:
         """Get data from the API."""
-
         if image_url:
             return cast(
                 Dict[str, Any],
