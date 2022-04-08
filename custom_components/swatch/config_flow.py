@@ -30,10 +30,11 @@ def get_config_entry_title(url_str: str) -> str:
     # Strip the scheme from the URL as it's not that interesting in the title
     # and space is limited on the integrations page.
     url = URL(url_str)
-    return str(url)[len(url.scheme + "://") :]
+    return str(url)[len(url.scheme + "://"):]
 
 
 def validate_host(host) -> bool:
+    """Validate if Swatch host is valid."""
     resp = requests.get(host)
 
     if not resp or resp.status_code != 200:
