@@ -68,4 +68,4 @@ repos:
         language: system
         types: [python]
         require_serial: true
-        files: ^(custom_components/frigate|tests)/.+\.py$
+        files: ^(custom_components/swatch|tests)/.+\.py$

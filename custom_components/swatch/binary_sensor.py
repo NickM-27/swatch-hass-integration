@@ -14,12 +14,11 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import (SwatchEntity, get_friendly_name, get_swatch_device_identifier,
                get_swatch_entity_unique_id, get_zones_and_objects)
-from .api import SwatchApiClient
+from .api import SwatchApiClient, SwatchApiClientError
 from .const import (ATTR_CLIENT, ATTR_CONFIG, DOMAIN, NAME,
                     SERVICE_DETECT_OBJECT)
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
-
 
 
 async def async_setup_entry(
@@ -116,15 +115,15 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity):  # type: ignore[misc
 
     async def detect_object(self, image_url):
         """Detect an object."""
-        if image_url:
-            resp = await self._api.async_detect_camera(self._cam_name, image_url)
-        else:
-            resp = await self._api.async_detect_camera(self._cam_name)
+        try:
+            if image_url:
+                resp = await self._api.async_detect_camera(self._cam_name, image_url)
+            else:
+                resp = await self._api.async_detect_camera(self._cam_name)
+        except SwatchApiClientError:
+            return
 
         result = (
-            resp
-            .get(self._zone_name, {})
-            .get(self._obj_name, {})
-            .get("result", False)
+            resp.get(self._zone_name, {}).get(self._obj_name, {}).get("result", False)
         )
         self._is_on = result
