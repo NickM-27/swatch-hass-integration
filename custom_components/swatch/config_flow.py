@@ -4,16 +4,14 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from yarl import URL
 import requests
-
 import voluptuous as vol
-
 from homeassistant import config_entries
 from homeassistant.const import CONF_URL
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
+from yarl import URL
 
 from .const import DOMAIN
 
@@ -58,18 +56,13 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
 
     host = data[CONF_URL]
 
-    host_is_valid = await hass.async_add_executor_job(
-        validate_host, host
-    )
-    
+    host_is_valid = await hass.async_add_executor_job(validate_host, host)
+
     if not host_is_valid:
         raise CannotConnect
 
     # Return info that you want to store in the config entry.
-    return {
-        "title": get_config_entry_title(host),
-        CONF_URL: host
-    }
+    return {"title": get_config_entry_title(host), CONF_URL: host}
 
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):

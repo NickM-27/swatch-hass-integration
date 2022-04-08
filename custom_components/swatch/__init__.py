@@ -5,11 +5,7 @@ import logging
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import (
-    ATTR_MODEL,
-    CONF_URL,
-    Platform,
-)
+from homeassistant.const import ATTR_MODEL, CONF_URL, Platform
 from homeassistant.core import Config, HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.entity import Entity
@@ -17,13 +13,7 @@ from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify
 
 from .api import SwatchApiClient, SwatchApiClientError
-from .const import (
-    ATTR_CONFIG, 
-    ATTR_CLIENT, 
-    DOMAIN,
-    NAME,
-    STARTUP_MESSAGE,
-)
+from .const import ATTR_CLIENT, ATTR_CONFIG, DOMAIN, NAME, STARTUP_MESSAGE
 from .service import detect_object_for_camera
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
@@ -32,8 +22,7 @@ PLATFORMS: list[Platform] = [Platform.BINARY_SENSOR]
 
 
 def get_swatch_device_identifier(
-    entry: ConfigEntry, 
-    camera_name: str | None = None
+    entry: ConfigEntry, camera_name: str | None = None
 ) -> tuple[str, str]:
     """Get a device identifier."""
     if camera_name:
@@ -42,11 +31,7 @@ def get_swatch_device_identifier(
         return (DOMAIN, entry.entry_id)
 
 
-def get_swatch_entity_unique_id(
-    config_entry_id: str, 
-    type_name: str, 
-    name: str
-) -> str:
+def get_swatch_entity_unique_id(config_entry_id: str, type_name: str, name: str) -> str:
     """Get the unique_id for a Swatch entity."""
     return f"{config_entry_id}:{type_name}:{name}"
 
@@ -57,7 +42,7 @@ def get_friendly_name(name: str) -> str:
 
 
 def get_zones_and_objects(
-    config: dict[str, Any], 
+    config: dict[str, Any],
 ) -> set[tuple[str, str, str]]:
     """Get cameras and tracking object tuples."""
     zone_objects = set()
@@ -124,6 +109,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN].pop(entry.entry_id)
 
     return unload_ok
+
 
 class SwatchEntity(Entity):  # type: ignore[misc]
     """Base class for Swatch entities."""

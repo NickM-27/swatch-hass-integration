@@ -15,8 +15,10 @@ _LOGGER: logging.Logger = logging.getLogger(__name__)
 
 HEADERS = {"Content-type": "application/json; charset=UTF-8"}
 
+
 class SwatchApiClientError(Exception):
     """General SwatchApiClient error."""
+
 
 class SwatchApiClient:
     """Swatch API client."""
@@ -104,4 +106,3 @@ class SwatchApiClient:
                 exc,
             )
             raise SwatchApiClientError from exc
-    

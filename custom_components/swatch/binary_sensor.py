@@ -3,35 +3,26 @@ from __future__ import annotations
 
 import logging
 from typing import Any, cast
-import voluptuous as vol
 
-from homeassistant.components.binary_sensor import (
-    DEVICE_CLASS_OCCUPANCY,
-    BinarySensorEntity,
-)
+import voluptuous as vol
+from homeassistant.components.binary_sensor import (DEVICE_CLASS_OCCUPANCY,
+                                                    BinarySensorEntity)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_platform
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
+from . import (SwatchEntity, get_friendly_name, get_swatch_device_identifier,
+               get_swatch_entity_unique_id, get_zones_and_objects)
 from .api import SwatchApiClient
-
-from . import (
-    SwatchEntity,
-    get_zones_and_objects,
-    get_friendly_name,
-    get_swatch_device_identifier,
-    get_swatch_entity_unique_id,
-)
-from .const import ATTR_CLIENT, ATTR_CONFIG, DOMAIN, NAME, SERVICE_DETECT_OBJECT
+from .const import (ATTR_CLIENT, ATTR_CONFIG, DOMAIN, NAME,
+                    SERVICE_DETECT_OBJECT)
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
-    hass: HomeAssistant, 
-    entry: ConfigEntry, 
-    async_add_entities: AddEntitiesCallback
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Binary sensor entry setup."""
     swatch_api = hass.data[DOMAIN][entry.entry_id][ATTR_CLIENT]
@@ -40,7 +31,9 @@ async def async_setup_entry(
     # Setup sensors
     async_add_entities(
         [
-            SwatchObjectSensor(entry, swatch_api, swatch_config, cam_name, zone_name, obj_name)
+            SwatchObjectSensor(
+                entry, swatch_api, swatch_config, cam_name, zone_name, obj_name
+            )
             for cam_name, zone_name, obj_name in get_zones_and_objects(swatch_config)
         ]
     )
@@ -48,11 +41,7 @@ async def async_setup_entry(
     # Setup services
     platform = entity_platform.async_get_current_platform()
     platform.async_register_entity_service(
-        SERVICE_DETECT_OBJECT,
-        {
-            vol.Optional('image_url'): str
-        },
-        "detect_object"
+        SERVICE_DETECT_OBJECT, {vol.Optional("image_url"): str}, "detect_object"
     )
 
 
@@ -122,5 +111,7 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity):  # type: ignore[misc
         else:
             resp = await self._api.async_detect_camera(self._cam_name)
 
-        result = resp.get(self._zone_name, {}).get(self._obj_name, {}).get('result', False)
+        result = (
+            resp.get(self._zone_name, {}).get(self._obj_name, {}).get("result", False)
+        )
         self._is_on = result
