@@ -15,6 +15,9 @@ _LOGGER: logging.Logger = logging.getLogger(__name__)
 
 HEADERS = {"Content-type": "application/json; charset=UTF-8"}
 
+class SwatchApiClientError(Exception):
+    """General SwatchApiClient error."""
+
 class SwatchApiClient:
     """Swatch API client."""
 
@@ -45,3 +48,60 @@ class SwatchApiClient:
             Dict[str, Any],
             await self.api_wrapper("get", str(URL(self._host) / f"api/{camera_name}")),
         )
+
+    async def api_wrapper(
+        self,
+        method: str,
+        url: str,
+        data: dict | None = None,
+        headers: dict | None = None,
+        decode_json: bool = True,
+    ) -> Any:
+        """Get information from the API."""
+        if data is None:
+            data = {}
+        if headers is None:
+            headers = {}
+
+        try:
+            async with async_timeout.timeout(TIMEOUT):
+                if method == "get":
+                    response = await self._session.get(
+                        url, headers=headers, raise_for_status=True
+                    )
+                    if decode_json:
+                        return await response.json()
+                    return await response.text()
+
+                if method == "put":
+                    await self._session.put(url, headers=headers, json=data)
+
+                elif method == "patch":
+                    await self._session.patch(url, headers=headers, json=data)
+
+                elif method == "post":
+                    await self._session.post(url, headers=headers, json=data)
+
+        except asyncio.TimeoutError as exc:
+            _LOGGER.error(
+                "Timeout error fetching information from %s: %s",
+                url,
+                exc,
+            )
+            raise SwatchApiClientError from exc
+
+        except (KeyError, TypeError) as exc:
+            _LOGGER.error(
+                "Error parsing information from %s: %s",
+                url,
+                exc,
+            )
+            raise SwatchApiClientError from exc
+        except (aiohttp.ClientError, socket.gaierror) as exc:
+            _LOGGER.error(
+                "Error fetching information from %s: %s",
+                url,
+                exc,
+            )
+            raise SwatchApiClientError from exc
+    

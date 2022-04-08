@@ -16,7 +16,7 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify
 
-from .api import SwatchApiClient
+from .api import SwatchApiClient, SwatchApiClientError
 from .const import (
     ATTR_CONFIG, 
     ATTR_CLIENT, 
@@ -103,8 +103,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     try:
         config = await client.async_get_config()
-    except Exception:
-        config = ""
+    except SwatchApiClientError:
+        return False
 
     hass.data[DOMAIN][entry.entry_id] = {
         ATTR_CLIENT: client,
