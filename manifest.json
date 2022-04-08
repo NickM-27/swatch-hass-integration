@@ -1,0 +1,15 @@
+{
+  "domain": "swatch",
+  "name": "swatch",
+  "config_flow": true,
+  "documentation": "https://github.com/NickM-27/swatch",
+  "requirements": [],
+  "ssdp": [],
+  "zeroconf": [],
+  "homekit": {},
+  "dependencies": [],
+  "codeowners": [
+    "@NickM-27"
+  ],
+  "iot_class": "local_push"
+}
