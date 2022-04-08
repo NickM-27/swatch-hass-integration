@@ -58,13 +58,13 @@ def get_friendly_name(name: str) -> str:
 
 def get_zones_and_objects(
     config: dict[str, Any], 
-) -> set[tuple[str, str]]:
+) -> set[tuple[str, str, str]]:
     """Get cameras and tracking object tuples."""
     zone_objects = set()
     for cam_name, cam_config in config["cameras"].items():
         for zone_name, zone_config in cam_config["zones"].items():
             for obj in zone_config["objects"]:
-                zone_objects.add((zone_name, obj))
+                zone_objects.add((cam_name, zone_name, obj))
 
     return zone_objects
 
