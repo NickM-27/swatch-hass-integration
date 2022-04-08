@@ -14,7 +14,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.entity import Entity
 from homeassistant.loader import async_get_integration
 
-from .const import ATTR_CLIENT, DOMAIN
+from .const import ATTR_CONFIG, ATTR_CLIENT, DOMAIN
 
 # TODO List the platforms that you want to support.
 # For your initial PR, limit it to 1 platform.
