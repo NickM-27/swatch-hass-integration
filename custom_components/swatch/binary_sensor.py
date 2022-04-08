@@ -21,6 +21,7 @@ from .const import (ATTR_CLIENT, ATTR_CONFIG, DOMAIN, NAME,
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
 
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -121,6 +122,9 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity):  # type: ignore[misc
             resp = await self._api.async_detect_camera(self._cam_name)
 
         result = (
-            resp.get(self._zone_name, {}).get(self._obj_name, {}).get("result", False)
+            resp
+            .get(self._zone_name, {})
+            .get(self._obj_name, {})
+            .get("result", False)
         )
         self._is_on = result
