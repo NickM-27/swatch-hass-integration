@@ -117,7 +117,6 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity):  # type: ignore[misc
 
     async def detect_object(self, image_url):
         """Detect an object."""
-        _LOGGER.error(f"Detecting object")
         if image_url:
             resp = await self._api.async_detect_camera(self._cam_name, image_url)
         else:
