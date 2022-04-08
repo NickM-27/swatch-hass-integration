@@ -47,7 +47,7 @@ class SwatchApiClient:
     async def async_detect_camera(
         self, 
         camera_name, 
-        image_url
+        image_url,
     ) -> dict[str, Any]:
         """Get data from the API."""
 
@@ -55,18 +55,19 @@ class SwatchApiClient:
             return cast(
                 Dict[str, Any],
                 await self.api_wrapper(
-                    "get", 
-                    str(URL(self._host) / f"api/{camera_name}",
-                    { "image_url": image_url },
-                )),
+                    "get",
+                    str(
+                        URL(self._host) / f"api/{camera_name}",
+                        {"image_url": image_url},
+                    ),
+                ),
             )
         else:
             return cast(
                 Dict[str, Any],
                 await self.api_wrapper(
-                    "get", 
-                    str(URL(self._host) / f"api/{camera_name}"
-                )),
+                    "get", str(URL(self._host) / f"api/{camera_name}")
+                ),
             )
 
     async def api_wrapper(
