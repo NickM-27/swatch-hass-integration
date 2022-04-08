@@ -14,7 +14,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_platform
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from api import SwatchApiClient
+from .api import SwatchApiClient
 
 from . import (
     SwatchEntity,
