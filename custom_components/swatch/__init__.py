@@ -87,7 +87,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # TODO Store an API object for your platforms to access
     # hass.data[DOMAIN][entry.entry_id] = MyApi(...)
 
-    client = SwatchApiClient(entry.data.get(CONF_URL), async_get_clientsession(hass))
+    client = SwatchApiClient(
+        entry.data.get(CONF_URL), 
+        async_get_clientsession(hass),
+    )
     model = f"{(await async_get_integration(hass, DOMAIN)).version}/1.0.0"
 
     try:
@@ -108,7 +111,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
+    if unload_ok := await hass.config_entries.async_unload_platforms(
+        entry, 
+        PLATFORMS,
+    ):
         hass.data[DOMAIN].pop(entry.entry_id)
 
     return unload_ok
@@ -131,4 +137,6 @@ class SwatchEntity(Entity):  # type: ignore[misc]
 
     def _get_model(self) -> str:
         """Get the Swatch device model string."""
-        return str(self.hass.data[DOMAIN][self._config_entry.entry_id][ATTR_MODEL])
+        return str(
+            self.hass.data[DOMAIN][self._config_entry.entry_id][ATTR_MODEL]
+        )
