@@ -26,11 +26,10 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 
 def get_config_entry_title(url_str: str) -> str:
     """Get the title of a config entry from the URL."""
-
     # Strip the scheme from the URL as it's not that interesting in the title
     # and space is limited on the integrations page.
     url = URL(url_str)
-    return str(url)[len(url.scheme + "://"):]
+    return str(url).replace('http://', '')
 
 
 def validate_host(host) -> bool:
@@ -43,10 +42,14 @@ def validate_host(host) -> bool:
         return True
 
 
-async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
+async def validate_input(
+    hass: HomeAssistant, 
+    data: dict[str, Any],
+) -> dict[str, Any]:
     """Validate the user input allows us to connect.
 
-    Data has the keys from STEP_USER_DATA_SCHEMA with values provided by the user.
+    Data has the keys from STEP_USER_DATA_SCHEMA with
+    values provided by the user.
     """
 
     # If your PyPI package is not built with async, pass your methods
