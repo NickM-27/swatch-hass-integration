@@ -47,17 +47,17 @@ class SwatchApiClient:
     async def async_detect_camera(
         self,
         camera_name,
-        image_url,
+        image_url: str = None,
     ) -> dict[str, Any]:
         """Get data from the API."""
         if image_url:
             return cast(
                 Dict[str, Any],
                 await self.api_wrapper(
-                    "get",
+                    "post",
                     str(
-                        URL(self._host) / f"api/{camera_name}",
-                        {"image_url": image_url},
+                        URL(self._host) / f"api/{camera_name}/detect",
+                        {"imageUrl": image_url},
                     ),
                 ),
             )
@@ -65,7 +65,7 @@ class SwatchApiClient:
             return cast(
                 Dict[str, Any],
                 await self.api_wrapper(
-                    "get", str(URL(self._host) / f"api/{camera_name}")
+                    "post", str(URL(self._host) / f"api/{camera_name}/detect")
                 ),
             )
 
@@ -100,7 +100,10 @@ class SwatchApiClient:
                     await self._session.patch(url, headers=headers, json=data)
 
                 elif method == "post":
-                    await self._session.post(url, headers=headers, json=data)
+                    response = await self._session.post(url, headers=headers, json=data)
+
+                    if response:
+                        return await response.json()
 
         except asyncio.TimeoutError as exc:
             _LOGGER.error(
