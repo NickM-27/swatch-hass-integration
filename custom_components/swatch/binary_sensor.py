@@ -119,7 +119,7 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity):  # type: ignore[misc
         """Return the device class."""
         return cast(str, DEVICE_CLASS_OCCUPANCY)
 
-    async def detect_object(self, image_url = None):
+    async def detect_object(self, image_url=None):
         """Detect an object."""
         try:
             if image_url:
@@ -132,7 +132,9 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity):  # type: ignore[misc
 
         if resp:
             result = (
-                resp.get(self._zone_name, {}).get(self._obj_name, {}).get("result", False)
+                resp.get(self._zone_name, {})
+                .get(self._obj_name, {})
+                .get("result", False)
             )
             self._is_on = result
         else:
