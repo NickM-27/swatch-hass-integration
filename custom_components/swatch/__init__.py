@@ -149,15 +149,14 @@ class SwatchEntity(Entity):  # type: ignore[misc]
 class SwatchDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage updating entities latest state from API."""
 
-    def __init__(self, hass: HomeAssistant, client: SwatchApiClient, object_name: str):
+    def __init__(self, hass: HomeAssistant, client: SwatchApiClient):
         """Initialize."""
         self._api = client
-        self.object_name = object_name
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Update data via library."""
         try:
-            return await self._api.async_get_object_state(self.object_name)
+            return await self._api.async_get_object_state()
         except SwatchApiClientError as exc:
             raise exc
