@@ -57,8 +57,8 @@ class SwatchApiClient:
                     "post",
                     str(
                         URL(self._host) / f"api/{camera_name}/detect",
-                        {"imageUrl": image_url},
                     ),
+                    {"imageUrl": image_url},
                 ),
             )
         else:
