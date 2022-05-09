@@ -15,7 +15,7 @@ from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify
 
 from .api import SwatchApiClient, SwatchApiClientError
-from .const import ATTR_CLIENT, ATTR_CONFIG, DOMAIN, NAME, PLATFORMS, STARTUP_MESSAGE
+from .const import ATTR_CLIENT, ATTR_CONFIG, ATTR_COORDINATOR, DOMAIN, NAME, PLATFORMS, STARTUP_MESSAGE
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 SCAN_INTERVAL = timedelta(seconds=5)
@@ -92,6 +92,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         entry.data.get(CONF_URL),
         async_get_clientsession(hass),
     )
+    coordinator = SwatchDataUpdateCoordinator(hass, client=client)
+    await coordinator.async_config_entry_first_refresh()
     model = f"{(await async_get_integration(hass, DOMAIN)).version}/1.0.0"
 
     try:
@@ -102,6 +104,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data[DOMAIN][entry.entry_id] = {
         ATTR_CLIENT: client,
         ATTR_CONFIG: config,
+        ATTR_COORDINATOR: coordinator,
         ATTR_MODEL: model,
     }
 
