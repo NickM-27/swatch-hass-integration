@@ -1,23 +1,24 @@
 """The swatch integration."""
 from __future__ import annotations
 
+from datetime import timedelta
 import logging
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import ATTR_MODEL, CONF_URL, Platform
+from homeassistant.const import ATTR_MODEL, CONF_URL
 from homeassistant.core import Config, HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify
 
 from .api import SwatchApiClient, SwatchApiClientError
-from .const import ATTR_CLIENT, ATTR_CONFIG, DOMAIN, NAME, STARTUP_MESSAGE
+from .const import ATTR_CLIENT, ATTR_CONFIG, DOMAIN, NAME, PLATFORMS, STARTUP_MESSAGE
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
-
-PLATFORMS: list[Platform] = [Platform.BINARY_SENSOR]
+SCAN_INTERVAL = timedelta(seconds=5)
 
 
 def get_swatch_device_identifier(
@@ -140,3 +141,20 @@ class SwatchEntity(Entity):  # type: ignore[misc]
         return str(
             self.hass.data[DOMAIN][self._config_entry.entry_id][ATTR_MODEL],
         )
+
+
+class SwatchDataUpdateCoordinator(DataUpdateCoordinator):
+    """Class to manage updating entities latest state from API."""
+
+    def __init__(self, hass: HomeAssistant, client: SwatchApiClient, object_name: str):
+        """Initialize."""
+        self._api = client
+        self.object_name = object_name
+        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
+
+    async def _async_update_data(self) -> dict[str, Any]:
+        """Update data via library."""
+        try:
+            return await self._api.async_get_object_state(self.object_name)
+        except SwatchApiClientError as exc:
+            raise exc

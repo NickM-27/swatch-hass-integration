@@ -1,5 +1,7 @@
 """Constants for the swatch integration."""
 
+from homeassistant.const import Platform
+
 NAME = "Swatch"
 DOMAIN = "swatch"
 
@@ -7,6 +9,9 @@ DOMAIN = "swatch"
 ATTR_CONFIG = "config"
 ATTR_CLIENT = "client"
 ATTR_CLIENT_ID = "client_id"
+
+# Platforms
+PLATFORMS: list[Platform] = [Platform.BINARY_SENSOR]
 
 # Services
 SERVICE_DETECT_OBJECT = "detect_object"
