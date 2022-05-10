@@ -118,6 +118,18 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity, CoordinatorEntity):  
     @property
     def is_on(self) -> bool:
         """Return true if the binary sensor is on."""
+        _LOGGER.error(f"updating is_on with state {self.coordinator.data} and {self._is_on}")
+        if self.coordinator.data:
+            data = (
+                self.coordinator.data.get(self._obj_name, {})
+                .get("result")
+            )
+            if data is not None:
+                try:
+                    self._is_on = bool(data)
+                except ValueError:
+                    pass
+
         return self._is_on
 
     @property

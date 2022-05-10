@@ -157,6 +157,6 @@ class SwatchDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self) -> dict[str, Any]:
         """Update data via library."""
         try:
-            return await self._api.async_get_object_state()
+            return await self._api.async_get_object_state("all")
         except SwatchApiClientError as exc:
             raise exc
