@@ -13,8 +13,10 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_platform
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from . import (
+    SwatchDataUpdateCoordinator,
     SwatchEntity,
     get_friendly_name,
     get_swatch_device_identifier,
@@ -22,7 +24,14 @@ from . import (
     get_zones_and_objects,
 )
 from .api import SwatchApiClient, SwatchApiClientError
-from .const import ATTR_CLIENT, ATTR_CONFIG, DOMAIN, NAME, SERVICE_DETECT_OBJECT
+from .const import (
+    ATTR_CLIENT,
+    ATTR_CONFIG,
+    ATTR_COORDINATOR,
+    DOMAIN,
+    NAME,
+    SERVICE_DETECT_OBJECT,
+)
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
@@ -33,6 +42,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Binary sensor entry setup."""
+    coordinator = hass.data[DOMAIN][entry.entry_id][ATTR_COORDINATOR]
     swatch_api = hass.data[DOMAIN][entry.entry_id][ATTR_CLIENT]
     swatch_config = hass.data[DOMAIN][entry.entry_id][ATTR_CONFIG]
 
@@ -41,6 +51,7 @@ async def async_setup_entry(
         [
             SwatchObjectSensor(
                 entry,
+                coordinator,
                 swatch_api,
                 swatch_config,
                 cam_name,
@@ -60,12 +71,13 @@ async def async_setup_entry(
     )
 
 
-class SwatchObjectSensor(SwatchEntity, BinarySensorEntity):  # type: ignore[misc]
+class SwatchObjectSensor(SwatchEntity, BinarySensorEntity, CoordinatorEntity):  # type: ignore[misc]
     """Swatch Object Sensor class."""
 
     def __init__(
         self,
         config_entry: ConfigEntry,
+        coordinator: SwatchDataUpdateCoordinator,
         swatch_api: SwatchApiClient,
         swatch_config: dict[str, Any],
         cam_name: str,
@@ -80,7 +92,8 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity):  # type: ignore[misc
         self._api = swatch_api
         self._swatch_config = swatch_config
 
-        super().__init__(config_entry)
+        SwatchEntity.__init__(self, config_entry)
+        CoordinatorEntity.__init__(self, coordinator)
 
     @property
     def unique_id(self) -> str:
@@ -112,6 +125,17 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity):  # type: ignore[misc
     @property
     def is_on(self) -> bool:
         """Return true if the binary sensor is on."""
+        _LOGGER.error(
+            f"updating is_on with state {self.coordinator.data} and {self._is_on}"
+        )
+        if self.coordinator.data:
+            data = self.coordinator.data.get(self._obj_name, {}).get("result")
+            if data is not None:
+                try:
+                    self._is_on = bool(data)
+                except ValueError:
+                    pass
+
         return self._is_on
 
     @property
