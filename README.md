@@ -1,7 +1,7 @@
 <!-- markdownlint-disable first-line-heading -->
 <!-- markdownlint-disable no-inline-html -->
 
-<img src="https://raw.githubusercontent.com/NickM-27/swatch-hass-integration/master/images/swatch.png"
+<img src="https://raw.githubusercontent.com/NickM-27/swatch-hass-integration/master/assets/swatch.png"
      alt="Swatch icon"
      width="16%"
      align="right"
