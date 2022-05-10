@@ -73,7 +73,9 @@ class SwatchApiClient:
         """Get latest object state from the API."""
         return cast(
             Dict[str, Any],
-            await self.api_wrapper("get", str(URL(self._host) / f"api/{object_name}/latest")),
+            await self.api_wrapper(
+                "get", str(URL(self._host) / f"api/{object_name}/latest")
+            ),
         )
 
     async def api_wrapper(

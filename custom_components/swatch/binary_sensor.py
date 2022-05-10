@@ -24,7 +24,14 @@ from . import (
     get_zones_and_objects,
 )
 from .api import SwatchApiClient, SwatchApiClientError
-from .const import ATTR_CLIENT, ATTR_CONFIG, ATTR_COORDINATOR, DOMAIN, NAME, SERVICE_DETECT_OBJECT
+from .const import (
+    ATTR_CLIENT,
+    ATTR_CONFIG,
+    ATTR_COORDINATOR,
+    DOMAIN,
+    NAME,
+    SERVICE_DETECT_OBJECT,
+)
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
@@ -118,12 +125,11 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity, CoordinatorEntity):  
     @property
     def is_on(self) -> bool:
         """Return true if the binary sensor is on."""
-        _LOGGER.error(f"updating is_on with state {self.coordinator.data} and {self._is_on}")
+        _LOGGER.error(
+            f"updating is_on with state {self.coordinator.data} and {self._is_on}"
+        )
         if self.coordinator.data:
-            data = (
-                self.coordinator.data.get(self._obj_name, {})
-                .get("result")
-            )
+            data = self.coordinator.data.get(self._obj_name, {}).get("result")
             if data is not None:
                 try:
                     self._is_on = bool(data)

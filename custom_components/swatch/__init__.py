@@ -15,7 +15,15 @@ from homeassistant.loader import async_get_integration
 from homeassistant.util import slugify
 
 from .api import SwatchApiClient, SwatchApiClientError
-from .const import ATTR_CLIENT, ATTR_CONFIG, ATTR_COORDINATOR, DOMAIN, NAME, PLATFORMS, STARTUP_MESSAGE
+from .const import (
+    ATTR_CLIENT,
+    ATTR_CONFIG,
+    ATTR_COORDINATOR,
+    DOMAIN,
+    NAME,
+    PLATFORMS,
+    STARTUP_MESSAGE,
+)
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 SCAN_INTERVAL = timedelta(seconds=5)
