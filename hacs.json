@@ -1,9 +1,5 @@
 {
     "hacs": "1.6.0",
     "name": "Swatch",
-    "domains": [
-        "binary_sensor"
-    ],
-    "iot_class": "Local Push",
     "homeassistant": "2021.12.0b2"
 }
