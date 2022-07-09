@@ -2,4 +2,5 @@ aiohttp
 aiohttp_cors==0.7.0
 attr
 homeassistant==2021.12.0b2
+atomicwrites==1.4.0
 yarl
