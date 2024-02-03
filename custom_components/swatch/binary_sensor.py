@@ -6,7 +6,7 @@ from typing import Any, cast
 
 import voluptuous as vol
 from homeassistant.components.binary_sensor import (
-    DEVICE_CLASS_OCCUPANCY,
+    BinarySensorDeviceClass,
     BinarySensorEntity,
 )
 from homeassistant.config_entries import ConfigEntry
@@ -138,7 +138,7 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity, CoordinatorEntity):  
     @property
     def device_class(self) -> str:
         """Return the device class."""
-        return cast(str, DEVICE_CLASS_OCCUPANCY)
+        return cast(str, BinarySensorDeviceClass.OCCUPANCY)
 
     async def detect_object(self, image_url=None):
         """Detect an object."""
